@@ -1,0 +1,282 @@
+﻿@model ShinobiClothing.Models.Product
+
+@{
+    ViewData["Title"] = Model.ProductName;
+}
+
+<section class="shinobi-product-details">
+
+    <div class="container">
+
+        <!-- Breadcrumb -->
+        <div class="shinobi-breadcrumb mb-4">
+
+            <a asp-action="Index">
+                SHOP
+            </a>
+
+            <span>/</span>
+
+            <span>
+                @Model.ProductName
+            </span>
+
+        </div>
+
+
+        <div class="row g-5">
+
+            <!-- Product Image -->
+            <div class="col-lg-6">
+
+                <div class="shinobi-details-image">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl"
+                             alt="@Model.ProductName" />
+                    }
+                    else
+                    {
+                        <div class="shinobi-details-no-image">
+                            <span>THEE SHINOBI</span>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- Product Information -->
+            <div class="col-lg-6">
+
+                @if (Model.Category != null)
+                {
+                    <p class="shinobi-product-category">
+                        @Model.Category.Name
+                    </p>
+                }
+
+                <h1 class="shinobi-details-title">
+                    @Model.ProductName
+                </h1>
+
+                <div class="shinobi-details-price">
+                    R @Model.Price.ToString("N2")
+                </div>
+
+                <div class="shinobi-details-divider"></div>
+
+                <p class="shinobi-details-description">
+                    @Model.Description
+                </p>
+
+
+                <!-- Available Variants -->
+                <div class="mt-4">
+
+                    <h5 class="shinobi-option-title">
+                        AVAILABLE SIZE & COLOUR
+                    </h5>
+
+                    @if (Model.ProductVariants != null &&
+                                        Model.ProductVariants.Any())
+                    {
+                        <div class="shinobi-variant-list">
+
+                            @foreach (var variant in Model.ProductVariants)
+                            {
+                                <div class="shinobi-variant-card">
+
+                                    <div>
+
+                                        <strong>
+                                            @variant.Size
+                                        </strong>
+
+                                        <span class="mx-2">
+                                            |
+                                        </span>
+
+                                        <span>
+                                            @variant.Colour
+                                        </span>
+
+                                    </div>
+
+                                    <div>
+
+                                        @if (variant.StockQuantity > 0)
+                                        {
+                                            <span class="shinobi-stock">
+                                                @variant.StockQuantity available
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="shinobi-out-of-stock">
+                                                OUT OF STOCK
+                                            </span>
+                                        }
+
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-light border">
+                            No variants are currently available for this product.
+                        </div>
+                    }
+
+                </div>
+
+
+                <!-- Customer Shopping Controls -->
+                @if (!User.IsInRole("Admin"))
+                {
+                    @if (Model.ProductVariants != null &&
+                                    Model.ProductVariants.Any(v => v.StockQuantity > 0))
+                    {
+                        <form asp-controller="Cart"
+                              asp-action="Add"
+                              method="post"
+                              class="shinobi-cart-form mt-4">
+
+                            @Html.AntiForgeryToken()
+
+                            <div class="mb-3">
+
+                                <label for="productVariantId"
+                                       class="form-label shinobi-option-title">
+                                    CHOOSE VARIANT
+                                </label>
+
+                                <select name="productVariantId"
+                                        id="productVariantId"
+                                        class="form-select shinobi-select"
+                                        required>
+
+                                    <option value="">
+                                        Select size and colour
+                                    </option>
+
+                                    @foreach (var variant in Model.ProductVariants
+                                                                .Where(v => v.StockQuantity > 0))
+                                    {
+                                        <option value="@variant.ProductVariantId">
+                                            @variant.Size -
+                                            @variant.Colour
+                                            (@variant.StockQuantity available)
+                                        </option>
+                                    }
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="row g-3 align-items-end">
+
+                                <div class="col-sm-4">
+
+                                    <label for="quantity"
+                                           class="form-label shinobi-option-title">
+                                        QUANTITY
+                                    </label>
+
+                                    <input type="number"
+                                           name="quantity"
+                                           id="quantity"
+                                           value="1"
+                                           min="1"
+                                           max="99"
+                                           class="form-control shinobi-quantity" />
+
+                                </div>
+
+                                <div class="col-sm-8">
+
+                                    <button type="submit"
+                                            class="btn shinobi-add-cart w-100">
+                                        ADD TO CART
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="shinobi-sold-out mt-4">
+                            CURRENTLY SOLD OUT
+                        </div>
+                    }
+                }
+
+
+                <!-- Admin Controls -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="shinobi-admin-product-panel mt-4">
+
+                        <p class="shinobi-admin-label">
+                            ADMINISTRATION
+                        </p>
+
+                        <p class="text-muted mb-3">
+                            Inventory management controls are available
+                            for this product.
+                        </p>
+
+                        <div class="d-flex flex-wrap gap-2">
+
+                            <a asp-action="Edit"
+                               asp-route-id="@Model.ProductId"
+                               class="btn btn-outline-dark">
+                                EDIT PRODUCT
+                            </a>
+
+                            <a asp-controller="ProductVariant"
+                               asp-action="Index"
+                               asp-route-productId="@Model.ProductId"
+                               class="btn btn-outline-dark">
+                                MANAGE VARIANTS
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@Model.ProductId"
+                               class="btn btn-outline-danger">
+                                DELETE PRODUCT
+                            </a>
+
+                        </div>
+
+                    </div>
+                }
+
+
+                <!-- Back -->
+                <div class="mt-4">
+
+                    <a asp-action="Index"
+                       class="shinobi-back-link">
+                        ← BACK TO SHOP
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

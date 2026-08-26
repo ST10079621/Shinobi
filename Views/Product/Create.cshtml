@@ -1,0 +1,210 @@
+﻿@model ShinobiClothing.Models.Product
+
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<section class="shinobi-admin-page">
+
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="shinobi-page-header">
+
+            <p class="shinobi-accent-text">
+                THEE SHINOBI ADMINISTRATION
+            </p>
+
+            <h1>
+                ADD PRODUCT
+            </h1>
+
+            <p>
+                Add a new clothing product to the Thee Shinobi collection.
+            </p>
+
+        </div>
+
+
+        <!-- Product Form -->
+        <div class="shinobi-admin-form-wrapper">
+
+            <div class="shinobi-admin-form-card">
+
+                <div class="shinobi-admin-form-header">
+
+                    <span class="shinobi-admin-form-mark">
+                        TS
+                    </span>
+
+                    <div>
+                        <h3>
+                            PRODUCT INFORMATION
+                        </h3>
+
+                        <p>
+                            Enter the details for the new product.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="shinobi-summary-divider"></div>
+
+
+                <form asp-action="Create"
+                      method="post">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-4">
+                    </div>
+
+
+                    <!-- Product Name -->
+                    <div class="mb-4">
+
+                        <label asp-for="ProductName"
+                               class="form-label shinobi-form-label">
+                            PRODUCT NAME
+                        </label>
+
+                        <input asp-for="ProductName"
+                               class="form-control shinobi-form-control"
+                               placeholder="e.g. Shinobi Oversized Hoodie" />
+
+                        <span asp-validation-for="ProductName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="mb-4">
+
+                        <label asp-for="Description"
+                               class="form-label shinobi-form-label">
+                            DESCRIPTION
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control shinobi-form-control"
+                                  rows="5"
+                                  placeholder="Enter a description for the product..."></textarea>
+
+                        <span asp-validation-for="Description"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Price -->
+                    <div class="mb-4">
+
+                        <label asp-for="Price"
+                               class="form-label shinobi-form-label">
+                            PRICE
+                        </label>
+
+                        <div class="shinobi-input-prefix">
+
+                            <span>
+                                R
+                            </span>
+
+                            <input asp-for="Price"
+                                   type="number"
+                                   step="0.01"
+                                   class="form-control shinobi-form-control"
+                                   placeholder="0.00" />
+
+                        </div>
+
+                        <span asp-validation-for="Price"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Category -->
+                    <div class="mb-4">
+
+                        <label asp-for="CategoryId"
+                               class="form-label shinobi-form-label">
+                            CATEGORY
+                        </label>
+
+                        <select asp-for="CategoryId"
+                                class="form-select shinobi-form-control">
+
+                            <option value="">
+                                -- Select Category --
+                            </option>
+
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <option value="@category.CategoryId">
+                                    @category.Name
+                                </option>
+                            }
+
+                        </select>
+
+                        <span asp-validation-for="CategoryId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Image URL -->
+                    <div class="mb-4">
+
+                        <label asp-for="ImageUrl"
+                               class="form-label shinobi-form-label">
+                            PRODUCT IMAGE URL
+                        </label>
+
+                        <input asp-for="ImageUrl"
+                               class="form-control shinobi-form-control"
+                               placeholder="https://..." />
+
+                        <small class="text-muted">
+                            Enter the URL of the product image.
+                        </small>
+
+                    </div>
+
+
+                    <!-- Form Actions -->
+                    <div class="shinobi-form-actions">
+
+                        <button type="submit"
+                                class="btn shinobi-btn-orange">
+                            ADD PRODUCT
+                        </button>
+
+                        <a asp-action="Index"
+                           class="btn shinobi-btn-outline">
+                            CANCEL
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

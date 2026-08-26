@@ -1,0 +1,154 @@
+﻿@model ShinobiClothing.Models.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+
+    var cart = ViewBag.Cart as ShinobiClothing.Models.Cart;
+
+    decimal total = 0;
+
+    if (cart != null)
+    {
+        foreach (var item in cart.CartItems)
+        {
+            if (item.ProductVariant?.Product != null)
+            {
+                total += item.ProductVariant.Product.Price * item.Quantity;
+            }
+        }
+    }
+}
+
+<div class="row">
+
+    <div class="col-lg-7">
+
+        <h1 class="mb-4">Checkout</h1>
+
+        <form asp-action="Index" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger">
+            </div>
+
+            <div class="card mb-4">
+
+                <div class="card-body">
+
+                    <h5 class="mb-3">
+                        Delivery Information
+                    </h5>
+
+                    <div class="mb-3">
+
+                        <label asp-for="DeliveryAddress"
+                               class="form-label">
+                        </label>
+
+                        <textarea asp-for="DeliveryAddress"
+                                  rows="5"
+                                  class="form-control">
+                        </textarea>
+
+                        <span asp-validation-for="DeliveryAddress"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-dark btn-lg">
+                Place Order
+            </button>
+
+            <a asp-controller="Cart"
+               asp-action="Index"
+               class="btn btn-outline-secondary btn-lg">
+                Back to Cart
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <div class="col-lg-5">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <h4>
+                    Order Summary
+                </h4>
+
+                <hr />
+
+                @if (cart != null)
+                {
+                    @foreach (var item in cart.CartItems)
+                    {
+                        var product = item.ProductVariant?.Product;
+                        var variant = item.ProductVariant;
+
+                        if (product == null || variant == null)
+                        {
+                            continue;
+                        }
+
+                        <div class="mb-3">
+
+                            <strong>
+                                @product.ProductName
+                            </strong>
+
+                            <br />
+
+                            <small class="text-muted">
+                                @variant.Colour -
+                                @variant.Size
+                            </small>
+
+                            <div class="d-flex justify-content-between">
+
+                                <span>
+                                    @item.Quantity × R @product.Price.ToString("N2")
+                                </span>
+
+                                <strong>
+                                    R @((product.Price * item.Quantity).ToString("N2"))
+                                </strong>
+
+                            </div>
+
+                        </div>
+                    }
+                }
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+
+                    <h5>Total</h5>
+
+                    <h5>
+                        R @total.ToString("N2")
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

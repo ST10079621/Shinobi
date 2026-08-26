@@ -1,0 +1,285 @@
+﻿@model ShinobiClothing.Models.Cart
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<section class="shinobi-cart-page">
+
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="shinobi-page-header">
+
+            <p class="shinobi-accent-text">
+                THEE SHINOBI
+            </p>
+
+            <h1>
+                YOUR CART
+            </h1>
+
+            <p>
+                Review your selected items before checkout.
+            </p>
+
+        </div>
+
+
+        @if (TempData["CartMessage"] != null)
+        {
+            <div class="alert alert-warning shinobi-cart-alert">
+                @TempData["CartMessage"]
+            </div>
+        }
+
+
+        @if (Model.CartItems == null || !Model.CartItems.Any())
+        {
+            <!-- Empty Cart -->
+
+            <div class="shinobi-empty-cart">
+
+                <div class="shinobi-empty-cart-mark">
+                    TS
+                </div>
+
+                <h2>
+                    YOUR CART IS EMPTY
+                </h2>
+
+                <p>
+                    You haven't added anything to your cart yet.
+                    Explore the collection and find your next look.
+                </p>
+
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="btn shinobi-btn-orange">
+                    CONTINUE SHOPPING
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                <!-- Cart Items -->
+
+                <div class="col-lg-8">
+
+                    <div class="shinobi-cart-items">
+
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <div class="shinobi-cart-item">
+
+                                <!-- Product Image -->
+
+                                <div class="shinobi-cart-image">
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                                                item.ProductVariant?.Product?.ImageUrl))
+                                    {
+                                        <img src="@item.ProductVariant.Product.ImageUrl"
+                                             alt="@item.ProductVariant.Product.ProductName" />
+                                    }
+                                    else
+                                    {
+                                        <div class="shinobi-cart-no-image">
+                                            TS
+                                        </div>
+                                    }
+
+                                </div>
+
+
+                                <!-- Product Details -->
+
+                                <div class="shinobi-cart-details">
+
+                                    <p class="shinobi-cart-category">
+                                        @item.ProductVariant?.Product?.Category?.Name
+                                    </p>
+
+                                    <h4>
+                                        @item.ProductVariant?.Product?.ProductName
+                                    </h4>
+
+                                    <p class="shinobi-cart-variant">
+                                        Size:
+                                        <strong>
+                                            @item.ProductVariant?.Size
+                                        </strong>
+
+                                        <span>|</span>
+
+                                        Colour:
+                                        <strong>
+                                            @item.ProductVariant?.Colour
+                                        </strong>
+                                    </p>
+
+                                    <p class="shinobi-cart-price">
+                                        R @item.ProductVariant?.Product?.Price.ToString("N2")
+                                    </p>
+
+                                </div>
+
+
+                                <!-- Quantity -->
+
+                                <div class="shinobi-cart-quantity">
+
+                                    <form asp-controller="Cart"
+                                          asp-action="Update"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="cartItemId"
+                                               value="@item.CartItemId" />
+
+                                        <label>
+                                            QTY
+                                        </label>
+
+                                        <input type="number"
+                                               name="quantity"
+                                               value="@item.Quantity"
+                                               min="1"
+                                               max="@item.ProductVariant?.StockQuantity"
+                                               class="form-control" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm shinobi-update-btn">
+                                            UPDATE
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+
+                                <!-- Remove -->
+
+                                <div class="shinobi-cart-remove">
+
+                                    <form asp-controller="Cart"
+                                          asp-action="Remove"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="cartItemId"
+                                               value="@item.CartItemId" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm shinobi-remove-btn">
+                                            REMOVE
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- Cart Summary -->
+
+                <div class="col-lg-4">
+
+                    <div class="shinobi-cart-summary">
+
+                        <p class="shinobi-accent-text">
+                            ORDER SUMMARY
+                        </p>
+
+                        <h3>
+                            YOUR ORDER
+                        </h3>
+
+                        <div class="shinobi-summary-divider"></div>
+
+
+                        @{
+                            decimal cartTotal = 0;
+
+                            foreach (var item in Model.CartItems)
+                            {
+                                if (item.ProductVariant?.Product != null)
+                                {
+                                    cartTotal +=
+                                    item.ProductVariant.Product.Price *
+                                    item.Quantity;
+                                }
+                            }
+                        }
+
+
+                        <div class="shinobi-summary-row">
+
+                            <span>
+                                Items
+                            </span>
+
+                            <span>
+                                @Model.CartItems.Sum(x => x.Quantity)
+                            </span>
+
+                        </div>
+
+
+                        <div class="shinobi-summary-row shinobi-summary-total">
+
+                            <strong>
+                                TOTAL
+                            </strong>
+
+                            <strong>
+                                R @cartTotal.ToString("N2")
+                            </strong>
+``1`1
+                        </div>
+
+
+                        <div class="mt-4">
+
+                            <a asp-controller="CustomerOrder"
+                               asp-action="Index"
+                               class="btn shinobi-btn-orange w-100">
+                                VIEW MY ORDERS
+                            </a>
+
+                        </div>
+
+
+                        <div class="mt-2">
+
+                            <a asp-controller="Product"
+                               asp-action="Index"
+                               class="btn shinobi-btn-outline w-100">
+                                CONTINUE SHOPPING
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</section>

@@ -1,0 +1,172 @@
+﻿@model IEnumerable<ShinobiClothing.Models.Order>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+}
+
+<section class="shinobi-admin-section">
+
+    ```
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="shinobi-page-header">
+
+            <p class="shinobi-accent-text">
+                THEE SHINOBI
+            </p>
+
+            <h1>
+                MANAGE ORDERS
+            </h1>
+
+            <p>
+                View customer orders, payment information and order status.
+            </p>
+
+        </div>
+
+
+        @if (TempData["OrderMessage"] != null)
+        {
+            <div class="shinobi-admin-alert success">
+                @TempData["OrderMessage"]
+            </div>
+        }
+
+
+        @if (!Model.Any())
+        {
+            <div class="shinobi-empty-admin">
+
+                <div class="shinobi-empty-admin-mark">
+                    TS
+                </div>
+
+                <h3>
+                    NO ORDERS YET
+                </h3>
+
+                <p>
+                    There are currently no customer orders to display.
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <!-- Orders Table -->
+
+            <div class="shinobi-admin-table-wrapper">
+
+                <table class="shinobi-admin-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="order-number">
+                                ORDER #
+                            </th>
+
+                            <th>
+                                CUSTOMER
+                            </th>
+
+                            <th>
+                                DATE
+                            </th>
+
+                            <th>
+                                TOTAL
+                            </th>
+
+                            <th>
+                                PAYMENT
+                            </th>
+
+                            <th>
+                                STATUS
+                            </th>
+
+                            <th class="order-action">
+                                ACTION
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+
+                                <td class="order-number">
+                                    <strong>
+                                        #@order.OrderId
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    @order.User?.UserName
+                                </td>
+
+                                <td class="order-date">
+                                    @order.OrderDate.ToString("dd/MM/yyyy HH:mm")
+                                </td>
+
+                                <td class="order-total">
+                                    R @order.TotalAmount.ToString("N2")
+                                </td>
+
+                                <td>
+
+                                    @if (order.Payment?.PaymentStatus == "Paid")
+                                    {
+                                        <span class="shinobi-status shinobi-status-paid">
+                                            PAID
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="shinobi-status shinobi-status-pending">
+                                            @(order.Payment?.PaymentStatus ?? "Pending")
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    <span class="shinobi-order-status">
+                                        @order.OrderStatus
+                                    </span>
+
+                                </td>
+
+                                <td class="order-action">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@order.OrderId"
+                                       class="btn shinobi-table-view-btn">
+                                        VIEW
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+    ```
+
+</section>

@@ -1,0 +1,206 @@
+﻿@model ShinobiClothing.Models.ProductVariant
+
+@{
+    ViewData["Title"] = "Add Product Variant";
+    var product = ViewBag.Product as ShinobiClothing.Models.Product;
+}
+
+<section class="shinobi-admin-page">
+
+    <div class="container">
+
+        <!-- Page Header -->
+        <div class="shinobi-page-header">
+
+            <p class="shinobi-accent-text">
+                THEE SHINOBI ADMINISTRATION
+            </p>
+
+            <h1>
+                ADD PRODUCT VARIANT
+            </h1>
+
+            <p>
+                Add a size, colour and stock quantity for this product.
+            </p>
+
+        </div>
+
+
+        <!-- Product Reference -->
+        <div class="shinobi-admin-product-reference">
+
+            <div class="shinobi-admin-reference-mark">
+                TS
+            </div>
+
+            <div>
+
+                <span>
+                    PRODUCT
+                </span>
+
+                <h4>
+                    @product?.ProductName
+                </h4>
+
+            </div>
+
+        </div>
+
+
+        <!-- Variant Form -->
+        <div class="shinobi-admin-form-wrapper">
+
+            <div class="shinobi-admin-form-card">
+
+                <div class="shinobi-admin-form-header">
+
+                    <span class="shinobi-admin-form-mark">
+                        +
+                    </span>
+
+                    <div>
+                        <h3>
+                            VARIANT INFORMATION
+                        </h3>
+
+                        <p>
+                            Specify the available size, colour and stock.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="shinobi-summary-divider"></div>
+
+
+                <form asp-action="Create"
+                      method="post">
+
+                    <input type="hidden"
+                           asp-for="ProductId" />
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-4">
+                    </div>
+
+
+                    <!-- Colour -->
+                    <div class="mb-4">
+
+                        <label asp-for="Colour"
+                               class="form-label shinobi-form-label">
+                            COLOUR
+                        </label>
+
+                        <input asp-for="Colour"
+                               class="form-control shinobi-form-control"
+                               placeholder="e.g. Black" />
+
+                        <span asp-validation-for="Colour"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Size -->
+                    <div class="mb-4">
+
+                        <label asp-for="Size"
+                               class="form-label shinobi-form-label">
+                            SIZE
+                        </label>
+
+                        <select asp-for="Size"
+                                class="form-select shinobi-form-control">
+
+                            <option value="">
+                                -- Select Size --
+                            </option>
+
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+
+                        </select>
+
+                        <span asp-validation-for="Size"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Stock -->
+                    <div class="mb-4">
+
+                        <label asp-for="StockQuantity"
+                               class="form-label shinobi-form-label">
+                            STOCK QUANTITY
+                        </label>
+
+                        <input asp-for="StockQuantity"
+                               type="number"
+                               min="0"
+                               class="form-control shinobi-form-control"
+                               placeholder="0" />
+
+                        <span asp-validation-for="StockQuantity"
+                              class="text-danger">
+                        </span>
+
+                        <small class="text-muted">
+                            Enter the number of units currently available.
+                        </small>
+
+                    </div>
+
+
+                    <!-- Form Actions -->
+                    <div class="shinobi-form-actions">
+
+                        <button type="submit"
+                                class="btn shinobi-btn-orange">
+                            ADD VARIANT
+                        </button>
+
+                        <a asp-action="Index"
+                           asp-route-productId="@Model.ProductId"
+                           class="btn shinobi-btn-outline">
+                            CANCEL
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Back to Products -->
+        <div class="mt-4">
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               class="shinobi-back-link">
+                ← BACK TO PRODUCTS
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

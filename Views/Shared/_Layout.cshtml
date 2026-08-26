@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Thee Shinobi</title>
+
+    <script type="importmap"></script>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/ShinobiClothing.styles.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+
+    <header>
+
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+
+            <div class="container-fluid">
+
+                <!-- Brand -->
+                <a class="navbar-brand fw-bold"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index">
+                    THEE SHINOBI
+                </a>
+
+                <!-- Mobile navigation button -->
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    <!-- Main navigation -->
+                    <ul class="navbar-nav flex-grow-1">
+
+                        <!-- Home -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               asp-controller="Home"
+                               asp-action="Index">
+                                Home
+                            </a>
+                        </li>
+
+                        <!-- Shop -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               asp-controller="Product"
+                               asp-action="Index">
+                                Shop
+                            </a>
+                        </li>
+
+
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            @if (!User.IsInRole("Admin"))
+                            {
+                                <!-- Customer Cart -->
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Cart"
+                                       asp-action="Index">
+                                        Cart
+                                    </a>
+                                </li>
+
+                                <!-- Customer Orders -->
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="CustomerOrder"
+                                       asp-action="Index">
+                                        My Orders
+                                    </a>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+
+
+                    <!-- Account navigation -->
+                    <ul class="navbar-nav">
+
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <!-- Welcome message -->
+                            <li class="nav-item">
+                                <span class="nav-link">
+                                    Welcome, @User.Identity.Name
+                                </span>
+                            </li>
+
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <!-- Admin Dashboard -->
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                       asp-controller="Admin"
+                                       asp-action="Index">
+                                        Admin
+                                    </a>
+                                </li>
+                            }
+
+
+                            <!-- Logout -->
+                            <li class="nav-item">
+
+                                <form asp-controller="Account"
+                                      asp-action="Logout"
+                                      method="post"
+                                      class="d-inline">
+
+                                    <button type="submit"
+                                            class="nav-link btn btn-link text-dark">
+                                        Logout
+                                    </button>
+
+                                </form>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <!-- Login -->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Account"
+                                   asp-action="Login">
+                                    Login
+                                </a>
+                            </li>
+
+                            <!-- Register -->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Account"
+                                   asp-action="Register">
+                                    Register
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- Main page content -->
+
+    <div class="container">
+
+        <main role="main" class="pb-3">
+
+            @RenderBody()
+
+        </main>
+
+    </div>
+
+
+    <!-- Footer -->
+
+    <footer class="border-top footer text-muted">
+
+        <div class="container">
+
+            &copy; 2026 - Thee Shinobi
+
+        </div>
+
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

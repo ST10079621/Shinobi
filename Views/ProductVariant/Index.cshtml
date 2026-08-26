@@ -1,0 +1,222 @@
+﻿@model IEnumerable<ShinobiClothing.Models.ProductVariant>
+
+@{
+    ViewData["Title"] = "Product Variants";
+    var product = ViewBag.Product as ShinobiClothing.Models.Product;
+}
+
+<section class="shinobi-admin-page">
+
+    <div class="container">
+
+        <!-- Header -->
+
+        <div class="shinobi-admin-page-header">
+
+            <div>
+
+                <p class="shinobi-accent-text">
+                    INVENTORY MANAGEMENT
+                </p>
+
+                <h1>
+                    PRODUCT VARIANTS
+                </h1>
+
+                <p>
+                    Manage available sizes, colours and stock
+                    for this product.
+                </p>
+
+            </div>
+
+            <div class="shinobi-admin-product-name">
+
+                <span>
+                    PRODUCT
+                </span>
+
+                <strong>
+                    @product?.ProductName
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- Actions -->
+
+        <div class="shinobi-admin-toolbar">
+
+            <a asp-controller="Product"
+               asp-action="Index"
+               class="btn shinobi-admin-back-btn">
+                ← BACK TO PRODUCTS
+            </a>
+
+            <a asp-action="Create"
+               asp-route-productId="@product?.ProductId"
+               class="btn shinobi-btn-orange">
+                + ADD VARIANT
+            </a>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+            <!-- Empty State -->
+
+            <div class="shinobi-admin-empty">
+
+                <div class="shinobi-admin-empty-mark">
+                    TS
+                </div>
+
+                <h2>
+                    NO VARIANTS YET
+                </h2>
+
+                <p>
+                    No sizes or colours have been added to this
+                    product yet.
+                </p>
+
+                <a asp-action="Create"
+                   asp-route-productId="@product?.ProductId"
+                   class="btn shinobi-btn-orange">
+                    ADD FIRST VARIANT
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <!-- Variant Table -->
+
+            <div class="shinobi-admin-table-wrapper">
+
+                <div class="shinobi-admin-table-header">
+
+                    <div>
+
+                        <p class="shinobi-accent-text">
+                            INVENTORY
+                        </p>
+
+                        <h2>
+                            AVAILABLE VARIANTS
+                        </h2>
+
+                    </div>
+
+                    <span class="shinobi-variant-count">
+                        @Model.Count() VARIANT(S)
+                    </span>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table shinobi-admin-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    COLOUR
+                                </th>
+
+                                <th>
+                                    SIZE
+                                </th>
+
+                                <th>
+                                    STOCK
+                                </th>
+
+                                <th>
+                                    ACTIONS
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var variant in Model)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <span class="shinobi-variant-colour">
+                                            @variant.Colour
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="shinobi-variant-size">
+                                            @variant.Size
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (variant.StockQuantity > 0)
+                                        {
+                                            <span class="shinobi-stock-badge">
+                                                @variant.StockQuantity IN STOCK
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="shinobi-out-stock-badge">
+                                                OUT OF STOCK
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="d-flex flex-wrap gap-2">
+
+                                            <a asp-action="Edit"
+                                               asp-route-id="@variant.ProductVariantId"
+                                               class="btn shinobi-table-edit-btn">
+                                                EDIT
+                                            </a>
+
+                                            <a asp-action="Delete"
+                                               asp-route-id="@variant.ProductVariantId"
+                                               class="btn shinobi-table-delete-btn">
+                                                DELETE
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</section>

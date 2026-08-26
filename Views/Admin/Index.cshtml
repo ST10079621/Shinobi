@@ -1,0 +1,182 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<section class="shinobi-admin-dashboard">
+
+    <div class="container">
+
+        <!-- Dashboard Header -->
+
+        <div class="shinobi-admin-header">
+
+            <div>
+
+                <p class="shinobi-accent-text">
+                    THEE SHINOBI
+                </p>
+
+                <h1>
+                    ADMIN DASHBOARD
+                </h1>
+
+                <p>
+                    Manage products, categories and customer orders
+                    from the administration area.
+                </p>
+
+            </div>
+
+            <div class="shinobi-admin-mark">
+                TS
+            </div>
+
+        </div>
+
+
+        <!-- Dashboard Cards -->
+
+        <div class="row g-4">
+
+            <!-- Products -->
+
+            <div class="col-md-4">
+
+                <div class="shinobi-admin-card">
+
+                    <div class="shinobi-admin-card-icon">
+                        01
+                    </div>
+
+                    <div class="shinobi-admin-card-content">
+
+                        <p class="shinobi-admin-card-label">
+                            INVENTORY
+                        </p>
+
+                        <h2>
+                            PRODUCTS
+                        </h2>
+
+                        <p>
+                            Add, edit and remove clothing products,
+                            manage product information and maintain
+                            your store inventory.
+                        </p>
+
+                        <a asp-controller="Product"
+                           asp-action="Index"
+                           class="btn shinobi-admin-btn">
+                            MANAGE PRODUCTS
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Categories -->
+
+            <div class="col-md-4">
+
+                <div class="shinobi-admin-card">
+
+                    <div class="shinobi-admin-card-icon">
+                        02
+                    </div>
+
+                    <div class="shinobi-admin-card-content">
+
+                        <p class="shinobi-admin-card-label">
+                            ORGANISATION
+                        </p>
+
+                        <h2>
+                            CATEGORIES
+                        </h2>
+
+                        <p>
+                            Create and manage clothing categories
+                            used to organise products throughout
+                            Thee Shinobi.
+                        </p>
+
+                        <a asp-controller="Category"
+                           asp-action="Index"
+                           class="btn shinobi-admin-btn">
+                            MANAGE CATEGORIES
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Orders -->
+
+            <div class="col-md-4">
+
+                <div class="shinobi-admin-card shinobi-admin-card-orders">
+
+                    <div class="shinobi-admin-card-icon">
+                        03
+                    </div>
+
+                    <div class="shinobi-admin-card-content">
+
+                        <p class="shinobi-admin-card-label">
+                            SALES
+                        </p>
+
+                        <h2>
+                            ORDERS
+                        </h2>
+
+                        <p>
+                            View customer orders, review order
+                            information and manage the order
+                            process.
+                        </p>
+
+                        <a asp-controller="Order"
+                           asp-action="Index"
+                           class="btn shinobi-admin-btn">
+                            MANAGE ORDERS
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Admin Notice -->
+
+        <div class="shinobi-admin-notice">
+
+            <div>
+
+                <span class="shinobi-admin-notice-title">
+                    ADMINISTRATION AREA
+                </span>
+
+                <p>
+                    Changes made in this area affect the products,
+                    categories and orders displayed throughout
+                    Thee Shinobi.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

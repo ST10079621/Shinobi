@@ -1,0 +1,89 @@
+﻿@model ShinobiClothing.Models.Product
+
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+<section class="shinobi-admin-page">
+
+    <div class="container">
+
+        <div class="shinobi-admin-form-header">
+
+            <p class="shinobi-accent-text">
+                ADMINISTRATION
+            </p>
+
+            <h1>
+                DELETE PRODUCT
+            </h1>
+
+            <p>
+                Review the product before confirming deletion.
+            </p>
+
+        </div>
+
+
+        <div class="shinobi-delete-card">
+
+            <div class="shinobi-delete-mark">
+                !
+            </div>
+
+            <h2>
+                DELETE PRODUCT?
+            </h2>
+
+            <p>
+                You are about to permanently delete:
+            </p>
+
+            <div class="shinobi-delete-name">
+                @Model.ProductName
+            </div>
+
+            <p class="text-muted">
+                This action cannot be undone.
+            </p>
+
+
+            <form asp-action="Delete"
+                  method="post"
+                  class="mt-4">
+
+                <input type="hidden"
+                       asp-for="ProductId" />
+
+
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+
+                    <button type="submit"
+                            class="btn shinobi-delete-confirm">
+                        DELETE PRODUCT
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn shinobi-btn-outline">
+                        CANCEL
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <div class="mt-4">
+
+            <a asp-action="Index"
+               class="shinobi-back-link">
+                ← BACK TO PRODUCTS
+            </a>
+
+        </div>
+
+    </div>
+
+</section>

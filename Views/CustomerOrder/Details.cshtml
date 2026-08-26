@@ -1,0 +1,280 @@
+﻿@model ShinobiClothing.Models.Order
+
+@{
+    ViewData["Title"] = $"Order #{Model.OrderId}";
+}
+
+<section class="shinobi-order-details-page">
+
+    <div class="container">
+
+        <!-- Header -->
+
+        <div class="shinobi-page-header">
+
+            <p class="shinobi-accent-text">
+                THEE SHINOBI
+            </p>
+
+            <h1>
+                ORDER #@Model.OrderId
+            </h1>
+
+            <p>
+                Review the details of your order.
+            </p>
+
+        </div>
+
+
+        @if (TempData["PaymentMessage"] != null)
+        {
+            <div class="alert alert-info shinobi-order-alert">
+                @TempData["PaymentMessage"]
+            </div>
+        }
+
+
+        <div class="row g-4">
+
+            <!-- Order Information -->
+
+            <div class="col-lg-8">
+
+                <div class="shinobi-details-card">
+
+                    <div class="shinobi-details-card-header">
+
+                        <div>
+
+                            <p class="shinobi-order-label">
+                                ORDER
+                            </p>
+
+                            <h2>
+                                #@Model.OrderId
+                            </h2>
+
+                        </div>
+
+                        <div class="text-md-end">
+
+                            <p class="shinobi-order-label">
+                                DATE
+                            </p>
+
+                            <span>
+                                @Model.OrderDate.ToString("dd MMM yyyy")
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Order Items -->
+
+                    <div class="shinobi-order-items">
+
+                        <h4>
+                            ITEMS
+                        </h4>
+
+                        @if (Model.OrderItems != null && Model.OrderItems.Any())
+                        {
+                            foreach (var item in Model.OrderItems)
+                            {
+                                <div class="shinobi-order-detail-item">
+
+                                    <div class="shinobi-order-detail-image">
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                                                        item.ProductVariant?.Product?.ImageUrl))
+                                        {
+                                            <img src="@item.ProductVariant.Product.ImageUrl"
+                                                 alt="@item.ProductVariant.Product.ProductName" />
+                                        }
+                                        else
+                                        {
+                                            <div class="shinobi-order-no-image">
+                                                TS
+                                            </div>
+                                        }
+
+                                    </div>
+
+
+                                    <div class="shinobi-order-detail-info">
+
+                                        <h5>
+                                            @item.ProductVariant?.Product?.ProductName
+                                        </h5>
+
+                                        <p>
+                                            Size:
+                                            <strong>
+                                                @item.ProductVariant?.Size
+                                            </strong>
+
+                                            <span>|</span>
+
+                                            Colour:
+                                            <strong>
+                                                @item.ProductVariant?.Colour
+                                            </strong>
+                                        </p>
+
+                                        <p>
+                                            Quantity:
+                                            <strong>
+                                                @item.Quantity
+                                            </strong>
+                                        </p>
+
+                                    </div>
+
+
+                                    <div class="shinobi-order-detail-price">
+
+                                        R @((item.UnitPrice * item.Quantity).ToString("N2"))
+
+                                    </div>
+
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p class="text-muted">
+                                No order items found.
+                            </p>
+                        }
+
+                    </div>
+
+
+                    <!-- Delivery -->
+
+                    <div class="shinobi-delivery-section">
+
+                        <h4>
+                            DELIVERY ADDRESS
+                        </h4>
+
+                        <p>
+                            @Model.DeliveryAddress
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Summary -->
+
+            <div class="col-lg-4">
+
+                <div class="shinobi-order-summary">
+
+                    <p class="shinobi-accent-text">
+                        ORDER SUMMARY
+                    </p>
+
+                    <h3>
+                        SUMMARY
+                    </h3>
+
+                    <div class="shinobi-summary-divider"></div>
+
+
+                    <div class="shinobi-summary-row">
+
+                        <span>
+                            Order Status
+                        </span>
+
+                        <strong>
+                            @Model.OrderStatus
+                        </strong>
+
+                    </div>
+
+
+                    @if (Model.Payment != null)
+                    {
+                        <div class="shinobi-summary-row">
+
+                            <span>
+                                Payment Status
+                            </span>
+
+                            <strong>
+                                @Model.Payment.PaymentStatus
+                            </strong>
+
+                        </div>
+                    }
+
+
+                    <div class="shinobi-summary-row shinobi-summary-total">
+
+                        <strong>
+                            TOTAL
+                        </strong>
+
+                        <strong>
+                            R @Model.TotalAmount.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <!-- Payment -->
+                    @if (Model.Payment == null ||
+                                        Model.Payment.PaymentStatus != "Paid")
+                    {
+                        <form asp-action="Pay"
+                              method="post"
+                              class="mt-4">
+
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="orderId"
+                                   value="@Model.OrderId" />
+
+                            <button type="submit"
+                                    class="btn shinobi-btn-orange w-100">
+                                PAY NOW
+                            </button>
+
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="shinobi-paid-message mt-4">
+                            PAYMENT COMPLETE
+                        </div>
+                    }
+
+
+                    <div class="mt-2">
+
+                        <a asp-action="Index"
+                           class="btn shinobi-summary-back w-100">
+                            BACK TO MY ORDERS
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

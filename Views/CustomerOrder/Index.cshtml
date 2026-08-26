@@ -1,0 +1,174 @@
+﻿@model IEnumerable<ShinobiClothing.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<section class="shinobi-orders-page">
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="shinobi-page-header">
+
+            <p class="shinobi-accent-text">
+                THEE SHINOBI
+            </p>
+
+            <h1>
+                MY ORDERS
+            </h1>
+
+            <p>
+                View your previous purchases and order status.
+            </p>
+
+        </div>
+
+
+        @if (TempData["PaymentMessage"] != null)
+        {
+            <div class="alert alert-info shinobi-order-alert">
+                @TempData["PaymentMessage"]
+            </div>
+        }
+
+
+        @if (Model == null || !Model.Any())
+        {
+            <!-- Empty Orders -->
+
+            <div class="shinobi-empty-orders">
+
+                <div class="shinobi-empty-orders-mark">
+                    TS
+                </div>
+
+                <h2>
+                    NO ORDERS YET
+                </h2>
+
+                <p>
+                    You haven't placed any orders with Thee Shinobi yet.
+                    Start exploring the collection and find your next look.
+                </p>
+
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="btn shinobi-btn-orange">
+                    START SHOPPING
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <!-- Orders -->
+
+            <div class="shinobi-orders-list">
+
+                @foreach (var order in Model)
+                {
+                    <div class="shinobi-order-card">
+
+                        <!-- Order Header -->
+
+                        <div class="shinobi-order-header">
+
+                            <div>
+
+                                <p class="shinobi-order-label">
+                                    ORDER
+                                </p>
+
+                                <h3>
+                                    #@order.OrderId
+                                </h3>
+
+                            </div>
+
+
+                            <div class="text-md-end">
+
+                                <p class="shinobi-order-label">
+                                    ORDER DATE
+                                </p>
+
+                                <span>
+                                    @order.OrderDate.ToString("dd MMM yyyy")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Order Information -->
+
+                        <div class="shinobi-order-info">
+
+                            <div>
+
+                                <span class="shinobi-order-info-label">
+                                    TOTAL
+                                </span>
+
+                                <strong>
+                                    R @order.TotalAmount.ToString("N2")
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span class="shinobi-order-info-label">
+                                    ORDER STATUS
+                                </span>
+
+                                <span class="shinobi-order-status">
+                                    @order.OrderStatus
+                                </span>
+
+                            </div>
+
+
+                            @if (order.Payment != null)
+                            {
+                                <div>
+
+                                    <span class="shinobi-order-info-label">
+                                        PAYMENT
+                                    </span>
+
+                                    <span class="shinobi-payment-status">
+                                        @order.Payment.PaymentStatus
+                                    </span>
+
+                                </div>
+                            }
+
+                        </div>
+
+
+                        <!-- Action -->
+
+                        <div class="shinobi-order-footer">
+
+                            <a asp-action="Details"
+                               asp-route-id="@order.OrderId"
+                               class="btn shinobi-order-view-btn">
+                                VIEW ORDER
+                            </a>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</section>

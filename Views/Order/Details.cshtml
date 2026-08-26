@@ -1,0 +1,319 @@
+﻿@model ShinobiClothing.Models.Order
+
+@{
+    ViewData["Title"] = $"Order #{Model.OrderId}";
+}
+
+<section class="shinobi-admin-page">
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="shinobi-admin-header">
+
+            <p class="shinobi-accent-text">
+                THEE SHINOBI ADMINISTRATION
+            </p>
+
+            <h1>
+                ORDER #@Model.OrderId
+            </h1>
+
+            <p>
+                Review customer, payment and order information.
+            </p>
+
+        </div>
+
+
+        @if (TempData["OrderMessage"] != null)
+        {
+            <div class="shinobi-admin-alert success">
+                @TempData["OrderMessage"]
+            </div>
+        }
+
+
+        <div class="row g-4">
+
+            <!-- Order Information -->
+            <div class="col-lg-6">
+
+                <div class="shinobi-admin-card">
+
+                    <p class="shinobi-accent-text">
+                        ORDER
+                    </p>
+
+                    <h3>
+                        ORDER INFORMATION
+                    </h3>
+
+                    <div class="shinobi-admin-divider"></div>
+
+                    <div class="shinobi-info-row">
+                        <span>Order Number</span>
+                        <strong>#@Model.OrderId</strong>
+                    </div>
+
+                    <div class="shinobi-info-row">
+                        <span>Customer</span>
+                        <strong>@Model.User?.UserName</strong>
+                    </div>
+
+                    <div class="shinobi-info-row">
+                        <span>Order Date</span>
+                        <strong>
+                            @Model.OrderDate.ToString("dd MMMM yyyy HH:mm")
+                        </strong>
+                    </div>
+
+                    <div class="shinobi-info-row">
+                        <span>Delivery Address</span>
+                        <strong>
+                            @Model.DeliveryAddress
+                        </strong>
+                    </div>
+
+                    <div class="shinobi-info-row total">
+                        <span>Total</span>
+                        <strong>
+                            R @Model.TotalAmount.ToString("N2")
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Payment Information -->
+            <div class="col-lg-6">
+
+                <div class="shinobi-admin-card">
+
+                    <p class="shinobi-accent-text">
+                        PAYMENT
+                    </p>
+
+                    <h3>
+                        PAYMENT INFORMATION
+                    </h3>
+
+                    <div class="shinobi-admin-divider"></div>
+
+                    @if (Model.Payment != null)
+                    {
+                        <div class="shinobi-info-row">
+                            <span>Payment ID</span>
+                            <strong>
+                                @Model.Payment.PaymentId
+                            </strong>
+                        </div>
+
+                        <div class="shinobi-info-row">
+                            <span>Amount</span>
+                            <strong>
+                                R @Model.Payment.Amount.ToString("N2")
+                            </strong>
+                        </div>
+
+                        <div class="shinobi-info-row">
+                            <span>Payment Status</span>
+
+                            @if (Model.Payment.PaymentStatus == "Paid")
+                            {
+                                <span class="shinobi-status paid">
+                                    PAID
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="shinobi-status pending">
+                                    @Model.Payment.PaymentStatus
+                                </span>
+                            }
+
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">
+                            No payment record exists for this order.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Update Order Status -->
+        <div class="shinobi-admin-card mt-4">
+
+            <p class="shinobi-accent-text">
+                ORDER MANAGEMENT
+            </p>
+
+            <h3>
+                UPDATE ORDER STATUS
+            </h3>
+
+            <div class="shinobi-admin-divider"></div>
+
+            <form asp-action="UpdateStatus"
+                  method="post">
+
+                <input type="hidden"
+                       name="orderId"
+                       value="@Model.OrderId" />
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-md-8">
+
+                        <label class="form-label shinobi-admin-label">
+                            ORDER STATUS
+                        </label>
+
+                        <select name="orderStatus"
+                                class="form-select shinobi-admin-select">
+
+                            <option value="Pending"
+                                    selected="@(Model.OrderStatus == "Pending")">
+                                Pending
+                            </option>
+
+                            <option value="Processing"
+                                    selected="@(Model.OrderStatus == "Processing")">
+                                Processing
+                            </option>
+
+                            <option value="Shipped"
+                                    selected="@(Model.OrderStatus == "Shipped")">
+                                Shipped
+                            </option>
+
+                            <option value="Completed"
+                                    selected="@(Model.OrderStatus == "Completed")">
+                                Completed
+                            </option>
+
+                            <option value="Cancelled"
+                                    selected="@(Model.OrderStatus == "Cancelled")">
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <button type="submit"
+                                class="btn shinobi-admin-orange-btn w-100">
+                            UPDATE STATUS
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- Products in Order -->
+        <div class="shinobi-admin-card mt-4">
+
+            <p class="shinobi-accent-text">
+                PURCHASE
+            </p>
+
+            <h3>
+                ITEMS IN ORDER
+            </h3>
+
+            <div class="shinobi-admin-divider"></div>
+
+            <div class="table-responsive">
+
+                <table class="shinobi-admin-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>PRODUCT</th>
+                            <th>COLOUR</th>
+                            <th>SIZE</th>
+                            <th>QUANTITY</th>
+                            <th>UNIT PRICE</th>
+                            <th>TOTAL</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            var product = item.ProductVariant?.Product;
+                            var variant = item.ProductVariant;
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        @product?.ProductName
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    @variant?.Colour
+                                </td>
+
+                                <td>
+                                    @variant?.Size
+                                </td>
+
+                                <td>
+                                    @item.Quantity
+                                </td>
+
+                                <td>
+                                    R @item.UnitPrice.ToString("N2")
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        R @((item.UnitPrice * item.Quantity).ToString("N2"))
+                                    </strong>
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="mt-4">
+
+            <a asp-action="Index"
+               class="shinobi-back-link">
+                ← BACK TO ORDERS
+            </a>
+
+        </div>
+
+    </div>
+
+</section>

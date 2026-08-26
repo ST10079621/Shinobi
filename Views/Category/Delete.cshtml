@@ -1,0 +1,90 @@
+﻿@model ShinobiClothing.Models.Category
+
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<section class="shinobi-admin-page">
+
+    <div class="container">
+
+        <div class="shinobi-admin-form-header">
+
+            <p class="shinobi-accent-text">
+                ADMINISTRATION
+            </p>
+
+            <h1>
+                DELETE CATEGORY
+            </h1>
+
+            <p>
+                Review the category before confirming deletion.
+            </p>
+
+        </div>
+
+
+        <div class="shinobi-delete-card">
+
+            <div class="shinobi-delete-mark">
+                !
+            </div>
+
+            <h2>
+                ARE YOU SURE?
+            </h2>
+
+            <p>
+                You are about to delete the following category:
+            </p>
+
+            <div class="shinobi-delete-name">
+                @Model.Name
+            </div>
+
+            <p class="text-muted">
+                Categories that are already assigned to products
+                should not be deleted.
+            </p>
+
+
+            <form asp-action="Delete"
+                  method="post"
+                  class="mt-4">
+
+                <input type="hidden"
+                       asp-for="CategoryId" />
+
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+
+                    <button type="submit"
+                            class="btn shinobi-delete-confirm">
+                        DELETE CATEGORY
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn shinobi-btn-outline">
+                        CANCEL
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <div class="mt-4">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="shinobi-back-link">
+                ← BACK TO ADMIN DASHBOARD
+            </a>
+
+        </div>
+
+    </div>
+
+</section>

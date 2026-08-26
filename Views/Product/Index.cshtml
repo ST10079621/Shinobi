@@ -1,0 +1,191 @@
+﻿@model IEnumerable<ShinobiClothing.Models.Product>
+
+@{
+    ViewData["Title"] = "Shop";
+}
+
+<!-- Shop Header -->
+<section class="shinobi-shop-header">
+
+    <div class="container">
+
+        <div class="row align-items-end">
+
+            <div class="col-md-8">
+
+                <p class="shinobi-accent-text">
+                    THEE SHINOBI
+                </p>
+
+                <h1 class="shinobi-shop-title">
+                    THE COLLECTION
+                </h1>
+
+                <p class="shinobi-shop-description">
+                    Explore the latest Thee Shinobi streetwear collection.
+                    Find pieces designed to make you stand out.
+                </p>
+
+            </div>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="col-md-4 text-md-end mt-4 mt-md-0">
+
+                    <a asp-action="Create"
+                       class="btn shinobi-btn-orange">
+                        + ADD PRODUCT
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Product Catalogue -->
+<section class="shinobi-products-section">
+
+    <div class="container">
+
+        @if (!Model.Any())
+        {
+            <div class="shinobi-empty-shop text-center">
+
+                <div class="shinobi-empty-icon">
+                    TS
+                </div>
+
+                <h3>
+                    NO PRODUCTS YET
+                </h3>
+
+                <p class="text-muted">
+                    Check back soon for new Thee Shinobi releases.
+                </p>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Create"
+                       class="btn shinobi-btn-orange mt-2">
+                        ADD YOUR FIRST PRODUCT
+                    </a>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="row g-4">
+
+                @foreach (var product in Model)
+                {
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+                        <div class="shinobi-product-card">
+
+                            <!-- Product Image -->
+                            <div class="shinobi-product-image">
+
+                                @if (!string.IsNullOrWhiteSpace(product.ImageUrl))
+                                {
+                                    <img src="@product.ImageUrl"
+                                         alt="@product.ProductName" />
+                                }
+                                else
+                                {
+                                    <div class="shinobi-no-image">
+                                        <span>THEE SHINOBI</span>
+                                    </div>
+                                }
+
+                            </div>
+
+
+                            <!-- Product Information -->
+                            <div class="shinobi-product-info">
+
+                                @if (product.Category != null)
+                                {
+                                    <p class="shinobi-product-category">
+                                        @product.Category.Name
+                                    </p>
+                                }
+
+                                <h3 class="shinobi-product-name">
+                                    @product.ProductName
+                                </h3>
+
+                                <p class="shinobi-product-description">
+                                    @product.Description
+                                </p>
+
+                                <div class="shinobi-product-bottom">
+
+                                    <span class="shinobi-product-price">
+                                        R @product.Price.ToString("N2")
+                                    </span>
+
+                                </div>
+
+
+                                <!-- View Product -->
+                                <a asp-action="Details"
+                                   asp-route-id="@product.ProductId"
+                                   class="btn shinobi-product-button">
+                                    VIEW PRODUCT
+                                </a>
+
+
+                                <!-- Admin Controls -->
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <div class="shinobi-admin-controls">
+
+                                        <div class="shinobi-admin-controls-label">
+                                            ADMINISTRATION
+                                        </div>
+
+                                        <div class="d-flex flex-wrap gap-2">
+
+                                            <a asp-action="Edit"
+                                               asp-route-id="@product.ProductId"
+                                               class="btn btn-sm btn-outline-dark">
+                                                EDIT
+                                            </a>
+
+                                            <a asp-controller="ProductVariant"
+                                               asp-action="Index"
+                                               asp-route-productId="@product.ProductId"
+                                               class="btn btn-sm btn-outline-dark">
+                                                VARIANTS
+                                            </a>
+
+                                            <a asp-action="Delete"
+                                               asp-route-id="@product.ProductId"
+                                               class="btn btn-sm btn-outline-danger">
+                                                DELETE
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+
+    </div>
+
+</section>

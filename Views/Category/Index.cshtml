@@ -1,0 +1,157 @@
+﻿@model IEnumerable<ShinobiClothing.Models.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<section class="shinobi-admin-page">
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="shinobi-admin-header">
+
+            <div>
+                <p class="shinobi-accent-text">
+                    ADMINISTRATION
+                </p>
+
+                <h1>
+                    CATEGORIES
+                </h1>
+
+                <p>
+                    Manage the clothing categories used across Thee Shinobi.
+                </p>
+            </div>
+
+            <div>
+                <a asp-action="Create"
+                   class="btn shinobi-btn-orange">
+                    + ADD CATEGORY
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- Categories -->
+        @if (!Model.Any())
+        {
+            <div class="shinobi-admin-empty">
+
+                <div class="shinobi-admin-mark">
+                    TS
+                </div>
+
+                <h3>
+                    NO CATEGORIES YET
+                </h3>
+
+                <p>
+                    Create your first clothing category to organise the store.
+                </p>
+
+                <a asp-action="Create"
+                   class="btn shinobi-btn-orange">
+                    ADD CATEGORY
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="shinobi-admin-card">
+
+                <div class="shinobi-admin-card-header">
+
+                    <div>
+                        <span class="shinobi-admin-label">
+                            CATEGORY MANAGEMENT
+                        </span>
+
+                        <h3>
+                            STORE CATEGORIES
+                        </h3>
+                    </div>
+
+                    <span class="shinobi-admin-count">
+                        @Model.Count() CATEGORIES
+                    </span>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table class="table shinobi-admin-table align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+                                <th>
+                                    CATEGORY
+                                </th>
+
+                                <th class="text-end">
+                                    ACTIONS
+                                </th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var category in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            @category.Name
+                                        </strong>
+                                    </td>
+
+                                    <td class="text-end">
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@category.CategoryId"
+                                           class="btn btn-sm shinobi-admin-edit">
+                                            EDIT
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@category.CategoryId"
+                                           class="btn btn-sm shinobi-admin-delete">
+                                            DELETE
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- Back -->
+        <div class="mt-4">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="shinobi-back-link">
+                ← BACK TO ADMIN DASHBOARD
+            </a>
+
+        </div>
+
+    </div>
+
+</section>

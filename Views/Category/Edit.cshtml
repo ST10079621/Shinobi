@@ -1,0 +1,99 @@
+﻿@model ShinobiClothing.Models.Category
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<section class="shinobi-admin-page">
+
+    <div class="container">
+
+        <div class="shinobi-admin-form-header">
+
+            <p class="shinobi-accent-text">
+                ADMINISTRATION
+            </p>
+
+            <h1>
+                EDIT CATEGORY
+            </h1>
+
+            <p>
+                Update the category information below.
+            </p>
+
+        </div>
+
+
+        <div class="shinobi-admin-form-card">
+
+            <div class="shinobi-admin-form-mark">
+                TS
+            </div>
+
+            <form asp-action="Edit"
+                  method="post">
+
+                <input type="hidden"
+                       asp-for="CategoryId" />
+
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label asp-for="Name"
+                           class="form-label shinobi-form-label">
+                        CATEGORY NAME
+                    </label>
+
+                    <input asp-for="Name"
+                           class="form-control shinobi-form-control" />
+
+                    <span asp-validation-for="Name"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <button type="submit"
+                            class="btn shinobi-btn-orange">
+                        SAVE CHANGES
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn shinobi-btn-outline">
+                        CANCEL
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <div class="mt-4">
+
+            <a asp-controller="Admin"
+               asp-action="Index"
+               class="shinobi-back-link">
+                ← BACK TO ADMIN DASHBOARD
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

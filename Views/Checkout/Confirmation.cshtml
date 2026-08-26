@@ -1,0 +1,133 @@
+﻿@model ShinobiClothing.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="text-center">
+
+    <div class="py-5">
+
+        <h1 class="text-success">
+            Order Successfully Created!
+        </h1>
+
+        <p class="lead">
+            Thank you for shopping with Thee Shinobi.
+        </p>
+
+        <p>
+            Your order number is:
+
+            <strong>
+                #@Model.OrderId
+            </strong>
+        </p>
+
+    </div>
+
+</div>
+
+<div class="row justify-content-center">
+
+    <div class="col-lg-8">
+
+        <div class="card">
+
+            <div class="card-body">
+
+                <h4>
+                    Order Details
+                </h4>
+
+                <hr />
+
+                <p>
+                    <strong>Order Date:</strong>
+                    @Model.OrderDate.ToString("dd MMMM yyyy")
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    @Model.OrderStatus
+                </p>
+
+                <p>
+                    <strong>Delivery Address:</strong>
+                    @Model.DeliveryAddress
+                </p>
+
+                <p>
+                    <strong>Payment Status:</strong>
+                    @Model.Payment?.PaymentStatus
+                </p>
+
+                <hr />
+
+                <h5>
+                    Items Purchased
+                </h5>
+
+                @foreach (var item in Model.OrderItems)
+                {
+                    <div class="d-flex justify-content-between border-bottom py-2">
+
+                        <div>
+
+                            <strong>
+                                @item.ProductVariant?.Product?.ProductName
+                            </strong>
+
+                            <br />
+
+                            <small>
+                                @item.ProductVariant?.Colour -
+                                @item.ProductVariant?.Size
+                            </small>
+
+                            <br />
+
+                            <small>
+                                Quantity: @item.Quantity
+                            </small>
+
+                        </div>
+
+                        <div>
+
+                            R @((item.UnitPrice * item.Quantity).ToString("N2"))
+
+                        </div>
+
+                    </div>
+                }
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+
+                    <h4>Total</h4>
+
+                    <h4>
+                        R @Model.TotalAmount.ToString("N2")
+                    </h4>
+
+                </div>
+
+                <div class="mt-4">
+
+                    <a asp-controller="Product"
+                       asp-action="Index"
+                       class="btn btn-dark">
+                        Continue Shopping
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
